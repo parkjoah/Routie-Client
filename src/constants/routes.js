@@ -3,4 +3,5 @@ export const ROUTES = {
   MYPAGE: "/mypage",
   LOGIN: "/login",
   UPLOAD: "/upload",
+  SEARCH: "/search",
 };

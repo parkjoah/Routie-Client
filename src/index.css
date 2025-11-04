@@ -33,29 +33,33 @@
   --spacing-gutter: 20px;
 
   /* Font Sizes, Weights, Line Heights */
-  --font-size-extrabold: 28px;
-  --font-weight-extrabold: 800;
-  --line-height-extrabold: 33.6px;
+  --font-extrabold: 800 28px/33.6px "SUITE Variable", sans-serif;
+  --font-semibold: 600 24px/28.8px "SUITE Variable", sans-serif;
+  --font-regular: 400 20px/24px "SUITE Variable", sans-serif;
+  --font-semibold-s: 600 16px/19.2px "SUITE Variable", sans-serif;
+  --font-regular-s: 400 12px/14.4px "SUITE Variable", sans-serif;
+  --font-small: 400 8px/9.6px "SUITE Variable", sans-serif;
+}
 
-  --font-size-semibold: 24px;
-  --font-weight-semibold: 600;
-  --line-height-semibold: 28.8px;
-
-  --font-size-regular: 20px;
-  --font-weight-regular: 400;
-  --line-height-regular: 24px;
-
-  --font-size-semibold-s: 16px;
-  --font-weight-semibold-s: 600;
-  --line-height-semibold-s: 19.2px;
-
-  --font-size-regular-s: 12px;
-  --font-weight-regular-s: 400;
-  --line-height-regular-s: 14.4px;
-
-  --font-size-small: 8px;
-  --font-weight-small: 400;
-  --line-height-small: 9.6px;
+@layer utilities {
+  .typo-extrabold {
+    font: var(--font-extrabold);
+  }
+  .typo-semibold {
+    font: var(--font-semibold);
+  }
+  .typo-regular {
+    font: var(--font-regular);
+  }
+  .typo-semibold-s {
+    font: var(--font-semibold-s);
+  }
+  .typo-regular-s {
+    font: var(--font-regular-s);
+  }
+  .typo-small {
+    font: var(--font-small);
+  }
 }
 
 html,
