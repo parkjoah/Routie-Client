@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-white: #ffffff;
+  --color-pink: #fe5081;
+  --color-orange: #fe9a35;
+  --color-green: #2cca6e;
+  --color-yellow: #f9d769;
+  --color-blue: #417ff9;
+  --color-gray: #858282;
+  --color-black: #000000;
+  --color-bg: #c6c6c6;
+  --color-shadow: #444444;
+  --color-bgwht: #f4f4f5;
+
+  /* Radius */
+  --radius-full: 999px;
+  --radius-xl: 16px;
+  --radius-l: 12px;
+  --radius-m: 8px;
+  --radius-s: 4px;
+
+  /* Spacing */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-s: 12px;
+  --spacing-m: 16px;
+  --spacing-l: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 40px;
+  --spacing-margin: 16px;
+  --spacing-gutter: 20px;
+
+  /* Font Sizes, Weights, Line Heights */
+  --font-size-extrabold: 28px;
+  --font-weight-extrabold: 800;
+  --line-height-extrabold: 33.6px;
+
+  --font-size-semibold: 24px;
+  --font-weight-semibold: 600;
+  --line-height-semibold: 28.8px;
+
+  --font-size-regular: 20px;
+  --font-weight-regular: 400;
+  --line-height-regular: 24px;
+
+  --font-size-semibold-s: 16px;
+  --font-weight-semibold-s: 600;
+  --line-height-semibold-s: 19.2px;
+
+  --font-size-regular-s: 12px;
+  --font-weight-regular-s: 400;
+  --line-height-regular-s: 14.4px;
+
+  --font-size-small: 8px;
+  --font-weight-small: 400;
+  --line-height-small: 9.6px;
+}
+
+html,
+body {
+  font-family: "SUITE Variable", sans-serif;
+}
