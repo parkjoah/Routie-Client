@@ -1,13 +1,12 @@
-import { Outlet } from "react-router-dom";
 import { Header } from "./Header";
 import { BottomNavBar } from "./BottomNavBar";
 
-export const Layout = () => {
+export const Layout = ({ type = "logo", text = "", children }) => {
   return (
     <div className="relative min-h-screen flex flex-col ">
-      <Header />
+      <Header type={type} text={text} />
       <main className="flex-1 overflow-y-auto pt-[60px] pb-[80px]">
-        <Outlet />
+        {children}
       </main>
       <BottomNavBar />
     </div>
