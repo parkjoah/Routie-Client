@@ -1,9 +1,14 @@
-// src/components/newroute/Routemake.jsx
 import React from 'react';
-import { Layout } from '../layout/layout'; 
+import { useNavigate } from "react-router-dom";
+import { Layout } from '../layout/layout';
 import '../../assets/sass/newroute/routemake.scss';
 
 const Routemake = () => {
+  const navigate = useNavigate();
+
+  const goToPlaceSearch = () => {
+    navigate("/placesearch");
+  };
   return (
     <Layout type="logo" text="">
       <div id="routemake_wrap">
@@ -45,7 +50,7 @@ const Routemake = () => {
             </div>
           </div>
 
-          <button className="next">
+          <button className="next" onClick={goToPlaceSearch}>
             <p>다음</p>
           </button>
         </div>

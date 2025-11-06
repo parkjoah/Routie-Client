@@ -8,6 +8,8 @@ import { Login } from "./pages/Login";
 import { Search } from "./pages/Search";
 import { Layout } from "./components/layout/layout";
 import Routemake from './components/newroute/Routemake'
+import Placesearch from "./components/newroute/Placesearch";
+import Addroute from "./components/newroute/Addroute";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path={ROUTES.UPLOAD} element={<Upload />} />
 
         <Route path={ROUTES.ROUTEMAKE} element={<Routemake/>} />
+        <Route path="/placesearch" element={<Placesearch />} />
+         <Route path={ROUTES.ADDROUTE} element={<Addroute/>} />
       </Routes>
     </BrowserRouter>
   );
