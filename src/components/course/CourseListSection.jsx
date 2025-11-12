@@ -39,7 +39,6 @@ export const CourseListSection = ({ onClick, coursedata }) => {
 
               <CourseItemBox
                 courseId={coursedata.routeId}
-                placeId={coursedata.placeId}
                 placedata={coursedata.places[idx]}
               />
             </div>
