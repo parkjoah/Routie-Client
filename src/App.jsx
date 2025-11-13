@@ -15,6 +15,7 @@ import Addroute from "./components/newroute/Addroute";
 import { PlaceDetailPage } from "./pages/PlaceDetailPage";
 import Uploading from "./components/newroute/uploading";
 import RoutieAIChatPage from "./pages/RoutieAIChatPage";
+import RoutieChatBanner from "./pages/RoutieChatBanner";
 // import Routies from "./pages/Routies";
 
 function App() {
@@ -34,6 +35,10 @@ function App() {
         <Route path="/uploading" element={<Uploading />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path={ROUTES.ROUTIEAICHAT} element={<RoutieAIChatPage />} />
+        <Route
+          path={ROUTES.ROUTIEAICHATBANNER}
+          element={<RoutieChatBanner />}
+        />
         {/* <Route path="/routies" element={<Routies />} /> */}
       </Routes>
     </BrowserRouter>

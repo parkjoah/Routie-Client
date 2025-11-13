@@ -9,4 +9,5 @@ export const ROUTES = {
   ADDROUTE: "/addroute",
   PLACE: "/course/:courseId/place/:placeId",
   ROUTIEAICHAT: "/routie/ai-chat",
+  ROUTIEAICHATBANNER: "/routie/ai-chat-start",
 };

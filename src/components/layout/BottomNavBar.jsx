@@ -15,7 +15,7 @@ const navItems = [
     label: "홈",
   },
   {
-    paths: ["/routie/ai-chat"],
+    paths: ["routie/ai-chat-start", "/routie/ai-chat"],
     icon: searchIcon,
     activeIcon: searchIconActive,
     label: "검색",
