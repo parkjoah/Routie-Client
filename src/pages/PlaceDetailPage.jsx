@@ -25,6 +25,12 @@ export const PlaceDetailPage = () => {
   );
   const category = placedata.category.split("/")[0];
 
+  const photoUrl = placedata.photoUrl?.startsWith(
+    "https://routie-4linethon.s3.ap-northeast-2.amazonaws.com/"
+  )
+    ? placedata.photoUrl
+    : samplePlaceImg;
+
   if (isLoading) return <div>로딩중...</div>;
   if (isError || !placedata) return <div>해당 장소를 찾을 수 없습니다.</div>;
 
@@ -32,7 +38,7 @@ export const PlaceDetailPage = () => {
     <Layout type="back" text={coursedata.title}>
       <section className="w-full aspect-[375/253] overflow-hidden">
         <img
-          src={samplePlaceImg}
+          src={photoUrl}
           alt="장소이미지"
           className="w-full h-full object-cover"
         />
