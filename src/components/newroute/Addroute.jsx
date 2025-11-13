@@ -26,24 +26,52 @@ const Addroute = () => {
   }, [posts]);
 
   const processedKeyRef = useRef(null);
+
   useEffect(() => {
     const incoming = location.state?.place;
     if (!incoming) return;
+
+    const exists = posts.some(p => p.placeName === incoming.name);
+    if (exists) return;
 
     if (processedKeyRef.current === location.key) return;
     processedKeyRef.current = location.key;
 
     setPosts(prev => [
       ...prev,
-      { imageUrl: '', review: '', placeName: incoming.name, category: incoming.category },
+      {
+        imageUrl: '',
+        review: '',
+        placeName: incoming.name,
+        category: incoming.category,
+        address: incoming.address || '',
+        latitude: incoming.latitude ?? null,
+        longitude: incoming.longitude ?? null,
+      },
     ]);
+  }, [location.key, location.state?.place, posts]);
 
-    navigate('/addroute', { replace: true });
-  }, [location.key, location.state, navigate]);
+  const handleComplete = () => {
+    navigate('/uploading', {
+      state: {
+        title: location.state?.title || '',
+        target: location.state?.target || '',
+        keywords: location.state?.keywords || [],
+        visitedDate: location.state?.visitedDate || '',
+      },
+    });
+  };
 
-  const handleComplete = () => navigate('/uploading');
-
-  const handleAddPost = () => navigate('/placesearch', { state: { from: '/addroute' } });
+  const handleAddPost = () =>
+    navigate('/placesearch', {
+      state: {
+        title: location.state?.title || '',
+        target: location.state?.target || '',
+        keywords: location.state?.keywords || [],
+        visitedDate: location.state?.visitedDate || '',
+        from: '/addroute',
+      },
+    });
 
   const handleRemovePost = (idx) => {
     setPosts(prev => prev.filter((_, i) => i !== idx));
@@ -102,7 +130,6 @@ const Addroute = () => {
                   )}
                 </div>
               </label>
-
               <input
                 type="file"
                 id={`imageUpload-${idx}`}
@@ -111,9 +138,6 @@ const Addroute = () => {
                 onChange={(e) => handleImage(idx, e.target.files?.[0])}
               />
             </div>
-
-
-
 
             <div className="review">
               <textarea
