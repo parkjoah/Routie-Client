@@ -8,4 +8,5 @@ export const ROUTES = {
   ROUTEMAKE: "/routemake",
   ADDROUTE: "/addroute",
   PLACE: "/course/:courseId/place/:placeId",
+  ROUTIEAICHAT: "/routie/ai-chat",
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SYSTEM_PROMPT } from "../lib/buildPrompt";
 import { callLutiAgent } from "../api/aiClient";
 
@@ -36,9 +36,14 @@ export function useLutiEngine() {
   const [step, setStep] = useState(0);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    addAssistant("안녕! 루티야 🌿 오늘은 어디 근처에서 놀고 싶어?");
+    if (initialized.current) {
+      return;
+    }
+    initialized.current = true;
+    addAssistant("안녕! 오늘은 어디 근처에서 놀고 싶어?");
     addOptions(STEPS[0].options);
   }, []);
 
