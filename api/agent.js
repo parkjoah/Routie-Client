@@ -15,12 +15,26 @@ export default async function handler(req, res) {
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
+
     if (!apiKey) {
       return res.status(500).json({ error: "Missing GEMINI_API_KEY" });
     }
 
-    // Vercel serverless는 req.json()  불가 -> 수정
-    const { systemPrompt, userPrompt } = req.body;
+    /** ------------------------------------------------------
+     *  ⚠️ 1) Body 수동 파싱 (Vercel serverless 필수)
+     * ------------------------------------------------------ */
+    let body = req.body;
+
+    if (!body || Object.keys(body).length === 0) {
+      const buffers = [];
+      for await (const chunk of req) {
+        buffers.push(chunk);
+      }
+      const raw = Buffer.concat(buffers).toString();
+      body = JSON.parse(raw);
+    }
+
+    const { systemPrompt, userPrompt } = body;
 
     if (!systemPrompt || !userPrompt) {
       return res
@@ -28,28 +42,69 @@ export default async function handler(req, res) {
         .json({ error: "systemPrompt and userPrompt are required" });
     }
 
-    const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" +
-      apiKey;
+    /** ------------------------------------------------------
+     * 2) fetchWithRetry (503 재시도)
+     * ------------------------------------------------------ */
+    async function fetchWithRetry(url, options, retries = 2, delay = 1200) {
+      for (let i = 0; i < retries; i++) {
+        const r = await fetch(url, options);
+
+        if (r.ok) return r;
+
+        if (r.status === 503) {
+          await new Promise((r) => setTimeout(r, delay));
+          continue;
+        }
+
+        throw new Error(`Gemini API Error: ${r.status}`);
+      }
+
+      throw new Error("Gemini API overloaded.");
+    }
+
+    /** ------------------------------------------------------
+     * 3) 모델 설정: 메인 → 오버로드 시 백업
+     * ------------------------------------------------------ */
+    let model = "gemini-2.5-flash";
+
+    const getApiUrl = (m) =>
+      `https://generativelanguage.googleapis.com/v1/models/${m}:generateContent?key=${apiKey}`;
 
     const requestBody = {
       contents: [
         { role: "user", parts: [{ text: systemPrompt }] },
         { role: "user", parts: [{ text: userPrompt }] },
       ],
-      generationConfig: {
-        temperature: 0.7,
-      },
+      generationConfig: { temperature: 0.7 },
     };
 
-    const response = await fetch(url, {
+    /** ------------------------------------------------------
+     * 4) 메인 모델 호출
+     * ------------------------------------------------------ */
+    let response = await fetchWithRetry(getApiUrl(model), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
 
+    /** ------------------------------------------------------
+     * 5) 메인 모델이 과부하일 경우 → lite로 자동 변경
+     * ------------------------------------------------------ */
+    if (response.status === 503) {
+      model = "gemini-2.5-flash-lite";
+
+      response = await fetchWithRetry(getApiUrl(model), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+    }
+
     const data = await response.json();
 
+    /** ------------------------------------------------------
+     * 6) text 추출 + JSON 코드블럭 추출
+     * ------------------------------------------------------ */
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     const jsonMatch = text.match(/```json([\s\S]*?)```/);
@@ -67,7 +122,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json(parsed);
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    return res.status(500).json({ error: "Gemini API call failed" });
+    console.error("Gemini Serverless API Error:", error);
+    return res.status(500).json({ error: error.message });
   }
 }
