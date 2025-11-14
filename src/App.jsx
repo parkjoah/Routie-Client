@@ -18,7 +18,6 @@ import Uploading from "./components/newroute/Uploading";
 import RoutieAIChatPage from "./pages/RoutieAIChatPage";
 import RoutieChatBanner from "./pages/RoutieChatBanner";
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -41,7 +40,6 @@ function App() {
           path={ROUTES.ROUTIEAICHATBANNER}
           element={<RoutieChatBanner />}
         />
-        {/* <Route path="/routies" element={<Routies />} /> */}
       </Routes>
     </BrowserRouter>
   );
