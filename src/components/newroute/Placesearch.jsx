@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BottomNavBar } from '../layout/BottomNavBar';
-import back_btn from '../../assets/icons/backicon.svg';
+import back_btn from '../../assets/icons/backIcon.svg';
 import searchIcon from '../../assets/icons/searchIcon.svg';
 import '../../assets/sass/newroute/placesearch.scss';
 
