@@ -1,4 +1,14 @@
 export default async function handler(req, res) {
+  // CORS 허용
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Preflight 대응
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
@@ -9,7 +19,14 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Missing GEMINI_API_KEY" });
     }
 
-    const { systemPrompt, userPrompt } = await req.json();
+    // Vercel serverless는 req.json()  불가 -> 수정
+    const { systemPrompt, userPrompt } = req.body;
+
+    if (!systemPrompt || !userPrompt) {
+      return res
+        .status(400)
+        .json({ error: "systemPrompt and userPrompt are required" });
+    }
 
     const url =
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" +
@@ -22,7 +39,6 @@ export default async function handler(req, res) {
       ],
       generationConfig: {
         temperature: 0.7,
-        response_mime_type: "application/json",
       },
     };
 
@@ -33,13 +49,20 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "{}";
+
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    const jsonMatch = text.match(/```json([\s\S]*?)```/);
 
     let parsed;
-    try {
-      parsed = JSON.parse(text);
-    } catch {
-      parsed = { routeTitle: "루트", places: [], raw: text };
+    if (jsonMatch) {
+      try {
+        parsed = JSON.parse(jsonMatch[1].trim());
+      } catch {
+        parsed = { raw: text };
+      }
+    } else {
+      parsed = { raw: text };
     }
 
     return res.status(200).json(parsed);
