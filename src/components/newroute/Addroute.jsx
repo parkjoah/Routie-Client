@@ -1,18 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { BottomNavBar } from "../layout/BottomNavBar";
-import back_btn from "../../assets/icons/backIcon.svg";
-import cameraIcon from "../../assets/icons/cameraIcon.svg";
-import plusIcon from "../../assets/icons/plusIcon.svg";
-import "../../assets/sass/newroute/addroute.scss";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useUploadImage } from "../../api/imagesApi";
+import React, { useEffect, useRef, useState } from 'react';
+import { BottomNavBar } from '../layout/BottomNavBar';
+import back_btn from '../../assets/icons/backIcon.svg';
+import cameraIcon from '../../assets/icons/cameraIcon.svg';
+import plusIcon from '../../assets/icons/plusIcon.svg';
+import '../../assets/sass/newroute/addroute.scss';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const STORAGE_KEY = "addroute_posts_v1";
+const STORAGE_KEY = 'addroute_posts_v1';
 
 const Addroute = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { mutateAsync: uploadImage } = useUploadImage();
 
   const [posts, setPosts] = useState(() => {
     const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -42,11 +40,11 @@ const Addroute = () => {
     setPosts((prev) => [
       ...prev,
       {
-        imageUrl: "",
-        review: "",
+        imageUrl: '',
+        review: '',
         placeName: incoming.name,
         category: incoming.category,
-        address: incoming.address || "",
+        address: incoming.address || '',
         latitude: incoming.latitude ?? null,
         longitude: incoming.longitude ?? null,
       },
@@ -54,24 +52,24 @@ const Addroute = () => {
   }, [location.key, location.state?.place, posts]);
 
   const handleComplete = () => {
-    navigate("/uploading", {
+    navigate('/uploading', {
       state: {
-        title: location.state?.title || "",
-        target: location.state?.target || "",
+        title: location.state?.title || '',
+        target: location.state?.target || '',
         keywords: location.state?.keywords || [],
-        visitedDate: location.state?.visitedDate || "",
+        visitedDate: location.state?.visitedDate || '',
       },
     });
   };
 
   const handleAddPost = () =>
-    navigate("/placesearch", {
+    navigate('/placesearch', {
       state: {
-        title: location.state?.title || "",
-        target: location.state?.target || "",
+        title: location.state?.title || '',
+        target: location.state?.target || '',
         keywords: location.state?.keywords || [],
-        visitedDate: location.state?.visitedDate || "",
-        from: "/addroute",
+        visitedDate: location.state?.visitedDate || '',
+        from: '/addroute',
       },
     });
 
@@ -79,19 +77,14 @@ const Addroute = () => {
     setPosts((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const handleImage = async (idx, file) => {
+  const handleImage = (idx, file) => {
     if (!file) return;
-    try {
-      const { data: imageUrl } = await uploadImage(file);
-      setPosts((prev) => {
-        const next = [...prev];
-        next[idx] = { ...next[idx], imageUrl };
-        return next;
-      });
-    } catch (err) {
-      console.error(err);
-      alert("이미지 업로드 중 오류 발생");
-    }
+    const url = URL.createObjectURL(file);
+    setPosts((prev) => {
+      const next = [...prev];
+      next[idx] = { ...next[idx], imageUrl: url };
+      return next;
+    });
   };
 
   const handleReview = (idx, value) => {
@@ -111,15 +104,15 @@ const Addroute = () => {
         <p>글 작성</p>
       </div>
 
-      <div className="content">
+      <div className="addroute_content">
         {posts.map((post, idx) => (
           <div key={`${post.placeName}-${idx}`}>
             <div className="place_title">
               <p>
-                {idx + 1}번 {post.placeName || "장소 미지정"}
+                {idx + 1}번 {post.placeName || '장소 미지정'}
               </p>
               <div className="category">
-                <p>{post.category || "카테고리"}</p>
+                <p>{post.category || '카테고리'}</p>
               </div>
               <button className="cancel" onClick={() => handleRemovePost(idx)}>
                 <p>취소</p>
@@ -130,11 +123,7 @@ const Addroute = () => {
               <label htmlFor={`imageUpload-${idx}`} className="upload_label">
                 <div className="upload_inner">
                   {post.imageUrl ? (
-                    <img
-                      className="preview"
-                      src={post.imageUrl}
-                      alt="preview"
-                    />
+                    <img className="preview" src={post.imageUrl} alt="preview" />
                   ) : (
                     <>
                       <img className="camera" src={cameraIcon} alt="" />
@@ -149,7 +138,7 @@ const Addroute = () => {
                 type="file"
                 id={`imageUpload-${idx}`}
                 accept="image/*"
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 onChange={(e) => handleImage(idx, e.target.files?.[0])}
               />
             </div>
@@ -170,16 +159,7 @@ const Addroute = () => {
           <img src={plusIcon} alt="" />
         </button>
 
-        <button
-          className="complete"
-          onClick={handleComplete}
-          style={{
-            position: "static",
-            display: "block",
-            marginLeft: "auto",
-            marginBottom: "20px",
-          }}
-        >
+        <button className="complete" onClick={handleComplete}>
           <p>완료</p>
         </button>
       </div>
