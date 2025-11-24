@@ -10,4 +10,5 @@ export const ROUTES = {
   PLACE: "/course/:courseId/place/:placeId",
   ROUTIEAICHAT: "/routie/ai-chat",
   ROUTIEAICHATBANNER: "/routie/ai-chat-start",
+  SHARE_PROFILE: "/share/users/:slug",
 };

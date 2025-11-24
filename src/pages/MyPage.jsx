@@ -8,10 +8,11 @@ import friendIcon from "../assets/icons/friendIcon.svg";
 import shareIcon from "../assets/icons/shareIcon.svg";
 import settingIcon from "../assets/icons/settingIcon.svg";
 import badge from "../assets/icons/badge.svg";
-
+import closeIcon from "../assets/icons/closeIcon.svg";
 import rotiePrf from "../assets/icons/rotiePrf.svg";
 import routieMePrf from "../assets/icons/routieMePrf.svg";
 import cameraIcon from "../assets/icons/cameraIcon.svg";
+import trash from "../assets/icons/trash.svg";
 
 import { ShareUrlModal } from "../components/common/shareUrlModal";
 import {
@@ -110,6 +111,8 @@ export function MyPage() {
   // 공유 모달
   const [showShare, setShowShare] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const fileInputRef = useRef(null);
 
@@ -250,29 +253,70 @@ export function MyPage() {
     }
   };
 
+  const LogoutConfirmModal = ({ onClose, onConfirm }) => {
+    return (
+      <div
+        className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+        onClick={onClose}
+      >
+        <div
+          className="bg-white rounded-[16px] w-[325px] text-center relative pt-[52px] pb-[46px]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-[18.45px] right-[25.44px]"
+          >
+            <img src={closeIcon} alt="닫기" />
+          </button>
+
+          <h3 className="typo-regular mb-8">로그아웃하시겠습니까?</h3>
+
+          <div className="flex justify-center gap-4 px-8">
+            <button
+              onClick={onConfirm}
+              className="flex-1 bg-[var(--color-yellow)] text-[var(--color-shadow)] rounded-[12px] py-3 typo-regular"
+            >
+              네
+            </button>
+            <button
+              onClick={onClose}
+              className="flex-1 bg-[#4B4B4B] text-white rounded-[12px] py-3 typo-regular"
+            >
+              아니요
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const openShare = async () => {
     if (!profile?.id) {
       setShareUrl(window.location.href);
-      return setShowShare(true);
+      setShowShare(true);
+      return;
     }
 
     try {
       const res = await createShareLink(profile.id);
-      const d = res?.data?.data || res?.data || {};
-      const maybeUrl = d.url || d.link;
-      const slug = d.slug;
+      const body = res?.data?.data || res?.data || {};
 
-      const finalUrl =
-        maybeUrl ||
-        (slug
-          ? `${window.location.origin}/share/u/${slug}`
-          : window.location.href);
+      const apiShareUrl = body.shareUrl;
+      const slug = body.slug;
+
+      const fallbackUrl = slug
+        ? `${window.location.origin}/share/users/${slug}`
+        : `${window.location.origin}/mypage`;
+
+      const finalUrl = apiShareUrl || fallbackUrl;
 
       setShareUrl(finalUrl);
-      setShowShare(true);
     } catch (e) {
       console.error("[mypage] 프로필 공유 링크 생성 실패", e);
-      setShareUrl(window.location.href);
+
+      setShareUrl(`${window.location.origin}/mypage`);
+    } finally {
       setShowShare(true);
     }
   };
@@ -323,7 +367,9 @@ export function MyPage() {
   return (
     <Layout type="logo">
       <HeaderRight>
-        <LogoutBtn onClick={handleLogout}>로그아웃</LogoutBtn>
+        <LogoutBtn onClick={() => setShowLogoutConfirm(true)}>
+          로그아웃
+        </LogoutBtn>
       </HeaderRight>
       <Inner>
         {/* 프로필 영역 */}
@@ -446,10 +492,20 @@ export function MyPage() {
               }
             }}
           >
-            🗑
+            <img src={trash} alt="삭제" />
           </TrashFab>
         )}
       </Inner>
+
+      {showLogoutConfirm && (
+        <LogoutConfirmModal
+          onClose={() => setShowLogoutConfirm(false)}
+          onConfirm={async () => {
+            setShowLogoutConfirm(false);
+            await handleLogout();
+          }}
+        />
+      )}
 
       {showShare && (
         <ShareUrlModal onClose={() => setShowShare(false)} url={shareUrl} />
@@ -460,13 +516,18 @@ export function MyPage() {
 
 const HeaderRight = styled.div`
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px));
+  top: 0;
   right: 16px;
   height: 58px;
   display: flex;
   align-items: center;
-  z-index: 20;
+  z-index: 999;
+  pointer-events: none;
+  & > * {
+    pointer-events: auto;
+  }
 `;
+
 const LogoutBtn = styled.button`
   border: 0;
   background: none;
@@ -676,12 +737,11 @@ const TrashFab = styled.button`
   position: fixed;
   right: 20px;
   bottom: 96px;
-  width: 56px;
-  height: 56px;
+  /* width: 56px;
+  height: 56px; */
   border-radius: 50%;
-  background: #ff5a84;
-  color: #fff;
-  font-size: 22px;
+  background: #fff;
+  font-size: 50px;
   display: grid;
   place-items: center;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);

@@ -17,6 +17,7 @@ import { Routies } from "./pages/Routies";
 import Uploading from "./components/newroute/Uploading";
 import RoutieAIChatPage from "./pages/RoutieAIChatPage";
 import RoutieChatBanner from "./pages/RoutieChatBanner";
+import { SharedProfile } from "./pages/SharedProfile";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           path={ROUTES.ROUTIEAICHATBANNER}
           element={<RoutieChatBanner />}
         />
+        <Route path={ROUTES.SHARE_PROFILE} element={<SharedProfile />} />
       </Routes>
     </BrowserRouter>
   );

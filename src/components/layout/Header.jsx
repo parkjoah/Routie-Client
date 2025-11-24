@@ -6,7 +6,7 @@ import { ROUTES } from "../../constants/routes";
 export const Header = ({ type, text }) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-[58px] border-[#C6C6C6] border-b-[0.5px] top-0 left-0 fixed bg-white">
+    <div className="w-full h-[58px] border-[#C6C6C6] border-b-[0.5px] top-0 left-0 fixed bg-white z-30">
       {type === "logo" ? (
         <div
           className="w-full px-[14px] py-[15px]"
