@@ -45,9 +45,13 @@
 ---
 # 🤖 Routie – AI Route Agent
 
-Related Issue: [#35 [Feat] 프론트에서 루티(Routie) AI 하루 루트 생성 기능 직접 설계 & 구축 (Gemini 연동 + 프록시 서버 + 서버리스 + UI)](https://github.com/LINE4THON-team17/Routie-Client/issues/35)
+Related Issue: 
 
-Related PR: [#38 [FEAT] ROUTIE AI 챗봇 연동 및 홈/코스 상세 기능 연결 (#30 #33 #35)](https://github.com/LINE4THON-team17/Routie-Client/pull/38)
+[#35 [Feat] 프론트에서 루티(Routie) AI 하루 루트 생성 기능 직접 설계 & 구축 (Gemini 연동 + 프록시 서버 + 서버리스 + UI)](https://github.com/LINE4THON-team17/Routie-Client/issues/35)
+
+Related PR: 
+
+[#38 [FEAT] ROUTIE AI 챗봇 연동 및 홈/코스 상세 기능 연결 (#30 #33 #35)](https://github.com/LINE4THON-team17/Routie-Client/pull/38)
 
 `Routie(루티)`는 ROUTIE의 AI 추천 엔진으로,  
 **사용자의 취향을 단계별 질문으로 수집한 뒤  
