@@ -85,28 +85,14 @@ https://github.com/user-attachments/assets/96c7391a-1599-4489-90e1-7b97f517b9c6
 
 ---
 
-## 🏗 AI 시스템 아키텍처 (로컬 + 배포 이중 구조)
+## 🏗 AI Agent 개발환경 (로컬 + 배포 이중 구조)
 ### 로컬
-```
-[Client - React]
-│
-│ (로컬 개발 시)
-▼
-[Express Server :3000]
-│
-▼
-[Gemini API]
-```
+
+<img width="885" height="245" alt="image" src="https://github.com/user-attachments/assets/ea98299e-fe46-42b6-a2d1-fa87f6c0cc88" />
+
 ### 배포
-```
-[Client - React (Vercel)]
-│
-▼
-[Vercel Serverless /api/agent]
-│
-▼
-[Gemini API]
-```
+<img width="885" height="243" alt="image" src="https://github.com/user-attachments/assets/5e838dfa-fdc8-49d3-8457-22d46dfd5e49" />
+
 
 - 개발 환경에서는 **Express 프록시 서버 사용**  
 - 배포 환경에서는 **Serverless Function으로 동일한 역할 수행**  
